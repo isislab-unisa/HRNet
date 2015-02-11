@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset=utf-8 />
+  <title>Surf Graph</title>
+  <link href="css/support/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/support/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="css/support/jquery-ui.structure.min.css">
+  <link rel="stylesheet" type="text/css" href="css/support/jquery-ui.theme.css">
+  <link href="css/support/vendor/bootstrap.min.css" rel="stylesheet">
+  <link href="css/support/flat-ui.css" rel="stylesheet">
+
+  <script src="js/support/vendor/jquery.min.js"></script>
+  <script src="js/support/jquery-ui.min.js"></script>
+  <script src="js/support/flat-ui.min.js"></script>
+  <script src="js/support/application.js"></script>
+  <script src="js/support/cytoscape.min.js"></script>
+  <script src="js/support/jquery.qtip.min.js"></script>
+  <script src="js/support/cytoscape.min.js"></script>
+  <script src="js/support/cytoscape-qtip.js"></script>
+  <script src="js/support/FileSaver.min.js"></script>
+  <script src="js/support/Chart.min.js"></script>
+  <script src="js/support/cola.js">
+  <script src="js/support/sankey.js"></script>
+  
+  
+  <script src="js/graphlayout.js"></script>
+  <script src="js/graph.js"></script>
+  
+ 
+  
+</script>
+
+  </head>
+  <body>
+    <style>
+      body {
+        /*min-height: 2000px;*/
+        height: 1vh;
+      }
+
+      .navbar-static-top {
+        margin-bottom: 19px;
+      }
+      .mycontainer{
+        width: 100%;
+       height: 100%;
+       background-image: "assets/img/map.svg";
+
+      }
+      .content {
+        position:fixed !important;
+        position:absolute;
+        top:55px;
+        right:0;
+        bottom:0;
+        left:0;
+        z-index: 1;
+      }
+      #chartContainer {
+
+      }
+    </style>
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+            <a class="navbar-brand" href="http://www.isislab.it">Surf Graph</a>
+        </div>
+        <div class="navbar-collapse collapse"> 
+          <ul class="nav navbar-nav">
+           <!-- <li class="active"><a href="#">Home</a></li>-->
+            
+          <!--  <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li> <span style="margin-left:10px;">User Nodes</span></li>
+                <li> <span style="margin-left:10px;">
+                  <input id="usernode" type="checkbox" data-toggle="switch"/>
+                </span></li>
+                <li class="divider"></li>
+                <li> <span style="margin-left:10px;">Other Nodes</span></li>
+                <li><span style="margin-left:10px;">
+                  <input id="othernode" type="checkbox" data-toggle="switch"/>
+                </span></li>
+              </ul>
+            </li>-->
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Metrics <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li> <a id="nodedegree" href="#">Nodes degree</a></li>
+                
+                <li class="divider"></li>
+                <li> <a id="pagerank" href="#">Page Rank</a></li>
+
+                <li class="divider"></li>
+                <li> <a id="duration" href="#">Request times</a></li>
+
+                <!--<li class="divider"></li>
+                <li> <a id="sankey" href="#">Sankey request times</a></li>
+                -->
+              </ul>
+            </li>
+
+
+           <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Export <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a id="PNGexport" href="#">PNG Image</a></li>
+                <li><a id="JSONexport" href="#">JSON</a></li>
+              </ul>
+            </li>
+            <li><a id="about" href="#about">About</a></li>
+            
+          
+          <!--  <li>
+             <div id="bs-example-navbar-collapse-5" class="collapse navbar-collapse">
+                <form role="search" class="navbar-form navbar-left">
+                  <div class="form-group">
+                    <input type="text" placeholder="Search" class="form-control" id="searchtext">
+                  </div>
+                  
+                   <button  class="btn btn-default mrs" type="button" id="searchnode">Search Node</button>
+                   
+                </form>
+            </div>
+          </li>-->
+         </ul>
+         <div class="nav navbar-nav navbar-right" style="margin-top:5px; margin-left:auto;">
+          
+         <li> <select id="layout" data-toggle="select" class="form-control select select-inverse mrs mbm">
+             <option value="0">Circle</option>
+             <option value="1">Random</option>
+             <option value="2">Grid</option>
+             <option value="3">Cola</option>
+             <option value="4">Concentric</option>
+             <option value="5">Breadth First Search</option>
+           </select>
+           </div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+
+    <div class="mycontainer">
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div id="content" class="content">
+        
+      </div>
+      <div id="chartContainer" style="display:none;" title="">
+        <canvas id="myChart" width="600" height="400">
+        </canvas>
+      </div>
+      <div id="sankeydiv" style="display:none;" title="">
+        
+      </div>
+
+      <div id="aboutdiv" style="display:none;" title="">
+        <p style="text-align:center; color: red;">
+          BETA version!
+        </p>
+
+        <p>
+          <b>Surf Graph</b> is a Chrome Extension that allows you to
+          display your browser's connections and aim to detect
+          malicious requests.
+        </p>
+
+        <p style="font-size:.75em;" >
+          Click the <i>Start</i> button in the popup window and start browsing.
+          You can click the <i>Open graph</i> button to open the graph window
+          and see your connection graph updating in real-time (you can also apply a different
+          layout form the select box in the top-right corner. From the same window,
+          you can also show different <i>Metrics</i> and <i>Export</i> the graph as image.
+        </p>
+
+        <table style="border:0; width:100%;">
+          <tr>
+            <th style="text-align:center; width:50%;">- Idea -</th>
+            <th style="text-align:center;">- Realization -</th>
+          </tr>
+          <tr>
+            <td style="text-align:center;vertical-align:top;">Delfina Malandrino</td>
+            <td style="text-align:center;vertical-align:top;">Carmine Spagnuolo<br/>Luca Vicidomini</td>
+          </tr>
+        </table>
+
+        <p style="text-align:center;">
+          <br/><a href="http://www.isislab.it"><img src="img/isislab-unisa.png" alt="UniSa ISISLab Logo" /></a>
+          <br/>Universit&agrave; degli Studi di Salerno, Italy
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    
+
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>HTTP Request Network</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/support/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="css/support/flat-ui.css" rel="stylesheet">
+    <script src="js/support/vendor/jquery.min.js"></script>
+    <script src="js/support/flat-ui.min.js"></script>
+    <script src="js/support/application.js"></script>
+    <script src="js/popup.js"></script>
+
+    <style>
+      body {
+        width: 300px;
+        height: 400px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        background-color: #eff0f2;
+      }
+    </style>
+  </head>
+  <body> 
+     <div id="content" >
+        <div class="tile" style="width: 300px; height:300px;">
+          <img src="img/map.svg" alt="graphimage" class="tile-image big-illustration">
+          <h3 class="tile-title">HTTP Request Network</h3>
+          <p>Surf on the web and visualize and export the navigation network-induced by the HTTP requests.</p>
+          <button  id="btnStart" class="btn btn-primary" style="width:100px">Start</button>
+          <button  id="btnGraph" class="btn btn-warning" style="width:100px;">Open graph</button>
+          <div style="font-size:14px; width: 270px; height:70px; margin-top:20px; margin-bottom:20px; background:rgba(0,0,0,0.1);
+          overflow-y:scroll; overflow-x:none; visibility:hidden;">
+            <span id="aler-message" style="color:red;">
+            </span>
+          </div>
+          
+       </div>
+      </div>
+  </body>
+</html>
