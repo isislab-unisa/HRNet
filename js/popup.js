@@ -2,7 +2,7 @@ var bgWindow = null;
 var currentTab = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-	
+
 	bgWindow = chrome.extension.getBackgroundPage();
 	var bgDoc = bgWindow.document;
 	var bgContent = bgDoc.getElementById("content");
@@ -11,45 +11,58 @@ document.addEventListener('DOMContentLoaded', function () {
 	{
 		console.log("set to stop from start");
 		$("#btnStart").attr("class","btn btn-primary");
-		$("#btnStart").html("Start");		
+		$("#btnStart").html("Start");
 	}
 	else
 	{
 		console.log("set to start from stop");
 		$("#btnStart").attr("class","btn btn-danger");
 		$("#btnStart").html("Stop");
+		$("#alert-message").css({"visibility":"hidden"});
 
 	}
+
+	$('#lnodes').text($(bgWindow.nodes).size());
+	$('#ledges').text($(bgWindow.edges).size());
+
 	$("#btnGraph")
 		.click(function(){
-		console.log(bgWindow.nodes.length);
+
 		if(bgWindow.nodes.length > 0)
 			bgWindow.showGraph();
 		else
-			$("#aler-message").replaceWith("<span id=\"aler-message\" style=\"color:red;\">Sorry but no nodes are found. To start the Press start before!</span>");
+			{
+				$("#alert-message").text("Sorry but no nodes are found. <br>(Press start button to enable HRNet).");
+				$("#alert-message").css({"visibility":"visible"});
+			}
 	});
+
 	$("#btnStart").click(function(){
 
 			if(!bgWindow.STATUS)
 			{
-				console.log("set to start from stop");
+
 				$("#btnStart").attr("class","btn btn-danger");
 				$("#btnStart").html("Stop");
 				bgWindow.startHTTPsurfing();
-				$("#aler-message").replaceWith("<span id=\"aler-message\" style=\"color:red;\">Started building new network!</span>");
+				$("#alert-message").text("Start HTTP sniffing.");
+				$("#alert-message").css({"visibility":"visible"});
+				$('#lnodes').text($(bgWindow.nodes).size());
+				$('#ledges').text($(bgWindow.edges).size());
 
 			}
 			else
 			{
-				console.log("set to stop from start");
+
 				$("#btnStart").attr("class","btn btn-primary");
 				$("#btnStart").html("Start");
-			
+
 				bgWindow.stopHTTPsurfing();
-				$("#aler-message").replaceWith("<span id=\"aler-message\" style=\"color:red;\">Building the nwtwork stopped!</span>");
+				$("#alert-message").text("Stop HTTP sniffing.");
+				$("#alert-message").css({"visibility":"visible"});
 
 			}
 
-		
+
 	});
 });

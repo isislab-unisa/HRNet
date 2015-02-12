@@ -2,7 +2,7 @@
   <html>
   <head>
   <meta charset=utf-8 />
-  <title>Surf Graph</title>
+  <title>HRNet</title>
   <link href="css/support/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="css/support/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="css/support/jquery-ui.structure.min.css">
@@ -22,13 +22,13 @@
   <script src="js/support/Chart.min.js"></script>
   <script src="js/support/cola.js">
   <script src="js/support/sankey.js"></script>
-  
-  
+
+
   <script src="js/graphlayout.js"></script>
   <script src="js/graph.js"></script>
-  
- 
-  
+
+
+
 </script>
 
   </head>
@@ -69,12 +69,12 @@
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
           </button>
-            <a class="navbar-brand" href="http://www.isislab.it">Surf Graph</a>
+            <a class="navbar-brand" href="http://www.isislab.it">HRNet</a>
         </div>
-        <div class="navbar-collapse collapse"> 
+        <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
            <!-- <li class="active"><a href="#">Home</a></li>-->
-            
+
           <!--  <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -93,7 +93,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Metrics <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li> <a id="nodedegree" href="#">Nodes degree</a></li>
-                
+
                 <li class="divider"></li>
                 <li> <a id="pagerank" href="#">Page Rank</a></li>
 
@@ -115,23 +115,23 @@
               </ul>
             </li>
             <li><a id="about" href="#about">About</a></li>
-            
-          
+
+
           <!--  <li>
              <div id="bs-example-navbar-collapse-5" class="collapse navbar-collapse">
                 <form role="search" class="navbar-form navbar-left">
                   <div class="form-group">
                     <input type="text" placeholder="Search" class="form-control" id="searchtext">
                   </div>
-                  
+
                    <button  class="btn btn-default mrs" type="button" id="searchnode">Search Node</button>
-                   
+
                 </form>
             </div>
           </li>-->
          </ul>
          <div class="nav navbar-nav navbar-right" style="margin-top:5px; margin-left:auto;">
-          
+
          <li> <select id="layout" data-toggle="select" class="form-control select select-inverse mrs mbm">
              <option value="0">Circle</option>
              <option value="1">Random</option>
@@ -150,14 +150,14 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div id="content" class="content">
-        
+
       </div>
       <div id="chartContainer" style="display:none;" title="">
         <canvas id="myChart" width="600" height="400">
         </canvas>
       </div>
       <div id="sankeydiv" style="display:none;" title="">
-        
+
       </div>
 
       <div id="aboutdiv" style="display:none;" title="">
@@ -198,7 +198,7 @@
 
     </div> <!-- /container -->
 
-    
+
 
   </body>
 </html>

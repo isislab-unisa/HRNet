@@ -38,7 +38,7 @@ function pageAddLog(message) {
 }
 
 var connectionListener = function(details) {
-	
+
 	var src_tab;
 	if(details.tabId > 0)
 
@@ -71,12 +71,12 @@ var connectionListener = function(details) {
 
 						if(edgeid in edgestime)
 							edgestime[edgeid]=edgestime[edgeid]+total_time;
-						else 
+						else
 							edgestime[edgeid]=total_time;
 
 						edges[edges.length] = { group: "edges", data: e };
 						tmpedges[tmpedges.length] = { group: "edges", data: e };
-						
+
 						if(graphWindow != null)
 							graphWindow.updateGraph(tmpnodes,tmpedges);
 
@@ -107,10 +107,9 @@ function startHTTPsurfing()
 
 	graph=cytoscape({
   		/* ... */
-
   	elements: {
-   		 nodes,
-    	 edges
+   		 nodes:[],
+    	 edges:[]
   		}
  		 /* ... */
 		});
@@ -123,7 +122,7 @@ function startHTTPsurfing()
 					currentTab = tabs[0];
 					chrome.tabs.reload(currentTab.tabId);
 				});
-				
+
 			});
 	 STATUS = true;
 }
@@ -131,6 +130,7 @@ function startHTTPsurfing()
 function stopHTTPsurfing() {
 	chrome.webRequest.onCompleted.removeListener(connectionListener);
 	chrome.webRequest.onCompleted.removeListener(connectionTimeListener);
+	STATUS=false;
 /*	time = {};
 	edgestime = {};
 	nodes = [];
@@ -154,7 +154,7 @@ function extractDomain(url) {
 	return withoutProtocol.substring(0, urlStart);
 }
 function addNode(id) {
-	
+
 	var nodes = graph.getElementById(id);
 	if (nodes.length) {
 		nodes.data('weight', .07 + nodes.data('weight'));
@@ -177,14 +177,14 @@ function addNode(id) {
 	return node;
 }
 function addUserNode(id) {
-	
+
 	var nodes = graph.getElementById(id);
 	if (nodes.length) {
 		nodes.data('weight', .07 + nodes.data('weight'));
 		if(graphWindow != null)
 		{
 			graphWindow.updateLayout();
-					
+
 		}
 		return null;
 	}
@@ -205,15 +205,15 @@ function addUserNode(id) {
 
 function addEdge(srcId, dstId) {
 	var id = srcId + "-" + dstId ;
-	
+
 	var edges = graph.getElementById(id);
 	if (edges.length) {
 		edges.data('weight', .07 + edges.data('weight'));
-		
+
 		if(graphWindow != null)
 		{
 			graphWindow.updateLayout();
-					
+
 		}
 		return null;
 	}
@@ -222,7 +222,7 @@ function addEdge(srcId, dstId) {
 		source: srcId,
 		target: dstId,
 		weight: 1
-		
+
 	}
 	graph.add({
 		group: "edges",
@@ -233,13 +233,13 @@ function addEdge(srcId, dstId) {
 }
 
 function showGraph() {
-	
+
 	chrome.windows.create({ url: "graph.html", width: screen.width/2, height: screen.height});
-	
+
 }
 
 function graphReady(window) {
 	graphWindow = window;
 	graphWindow.loadGraph(nodes, edges);
-	
+
 }
