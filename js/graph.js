@@ -2,7 +2,7 @@ var bgWindow;
 var cy = null;
 var layout=0;
 var lastChart = null;
-var optionschart = 
+var optionschart =
 		{
 		    ///Boolean - Whether grid lines are shown across the chart
 		    scaleShowGridLines : true,
@@ -42,11 +42,16 @@ var optionschart =
 
 		    //String - A legend template
 		    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+				,
+				scaleShowLabels: true,
+
+			// Interpolated JS string - can access value
+			scaleLabel: "<%=value%>"
 
 		};
 
 document.addEventListener('DOMContentLoaded', function () {
-	
+
 	Chart.defaults.global = {
 		    // Boolean - Whether to animate the chart
 		    animation: true,
@@ -183,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
   		autoungrabify: false,
   	  	autounselectify: false,
 	  	container: document.getElementById("content"),
-	  
+
 	 	style: cytoscape.stylesheet()
 	    .selector('node')
 	      .css({
@@ -217,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
         		'background-color': '#34495E'
      			 })
 	      ,
-	  
+
 	  	elements: {
 	    	nodes: [ ],
 	    	edges: [ ]
@@ -232,12 +237,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	  try { // your browser may block popups
 	    window.open( this.data('href') );
 	  } catch(e){ // fall back on url change
-	    window.location.href = this.data('href'); 
-	  } 
+	    window.location.href = this.data('href');
+	  }
 	});
 	$("#searchnode").click(function(){
 		alert($("#searchtext").val());
-    	
+
 	});
 	//$("#onode").change(function(){
 	//	alert($(this).is(':checked'));
@@ -251,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
         	alert($elements);
     	}
 	});
-	
+
 	$("#usernode").change(function(){
 		alert($(this).is(':checked'));
 	});
@@ -275,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	        	view[i] = png.charCodeAt(i) & 0xff;
 	    	}
 			var blob = new Blob([arraybuffer], {type: 'image/png', encoding: 'utf-8'});
-			
+
 			saveAs(blob, "graph.png");
 		}
 		else alert("No elements in the graph!");
@@ -290,17 +295,34 @@ document.addEventListener('DOMContentLoaded', function () {
 			var blob = new Blob([JSON.stringify(json)], {type: "text/plain;charset=utf-8"});
 			saveAs(blob, "graph.txt");
 		}else alert("No elements in the graph!");
-		
+
 	});
-	
+	$("#GEXF").click(function(){
+		//alert($(this).val());
+		if(cy.elements().length > 0)
+		{
+			var gexf="?xml version=\"1.0\" encoding=\"UTF-8\"?><gexf xmlns=\"http://www.gexf.net/1.2draft\" version="1.2"><meta lastmodifieddate=\"2009-03-20\"><creator>hrnet.isislab.it</creator><description>This graph was made by sniffing the HTTP request.</description></meta><graph mode=\"static\" defaultedgetype=\"undirected\">";
+			gexf+="<nodes>";
+			var id=0;
+			cy.nodes().forEach(function (ele){
+					var node= cy.getElementById(ele.id());
+						gexf+="<node id=\""+id"\" label=\""+ele.id()+"\"/>"
+				});
+			gexf+="</nodes> <edges>";
+			alert(XML.innerHTML);
+
+		}else alert("No elements in the graph!");
+
+	});
+
 	$("#nodedegree").click(function(){
-		
+
 		var nodes_degree = {};
 		cy.nodes().forEach(function (ele){
 				var node= cy.getElementById(ele.id());
   				nodes_degree[ele.id()] = node.degree();
 			});
-		
+
 		values=computeKeysValues(nodes_degree);
 		var data = {
     		labels: values.keys,
@@ -318,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		    ]
 		};
 
-		
+
 		$("#myChart").attr("width",$(window).width() * .75);
 		$("#myChart").attr("height",$(window).height() * .45);
 		var ctx = document.getElementById("myChart").getContext("2d");
@@ -326,31 +348,31 @@ document.addEventListener('DOMContentLoaded', function () {
 		 document.getElementById("myChart").height );
 		if(lastChart != null) lastChart.destroy();
 		lastChart = new Chart(ctx).Line(data, optionschart);
-	
+
 		//$("#chartContainer").attr("title","Nodes Degree");
 		$("#chartContainer").dialog({
 			width: $(window).width() * .8,
 			height:  $(window).height() * .5,
 			title:"Nodes Degree",
-			close: function(event, ui) 
-        	{ 
+			close: function(event, ui)
+        	{
             	$('#myChart').html("");
-        	} 
+        	}
 		});
 	});
 
 	$("#pagerank").click(function(){
-		
+
 		var pr_nodes = cy.elements().pageRank({iterations:10000});
-		
+
 		var nodes_rank = {};
 		cy.nodes().forEach(function (ele){
 				var node= cy.getElementById(ele.id());
   				nodes_rank[ele.id()] = pr_nodes.rank(node);
 			});
-		
+
 		valuesnodes = computeKeysValues(nodes_rank);
-		
+
 		var data = {
     		labels: valuesnodes.keys,
     		datasets: [
@@ -378,25 +400,25 @@ document.addEventListener('DOMContentLoaded', function () {
 			width: $(window).width() * .8,
 			height:  $(window).height() * .5,
 			title:"Page Rank",
-			close: function(event, ui) 
-        	{ 
+			close: function(event, ui)
+        	{
             	$('#myChart').html("");
-        	} 
+        	}
 		});
-		
+
 	});
 	$("#duration").click(function(){
-		
-		
+
+
 		var durations = {};
 		cy.edges().forEach(function (ele){
 				var edge= cy.getElementById(ele.id());
 				if(bgWindow.edgestime[ele.id()] && !isNaN(bgWindow.edgestime[ele.id()]))
   					durations[ele.id()] = bgWindow.edgestime[ele.id()] ;
 			});
-		
+
 		valuesedges = computeKeysValues(durations);
-		
+
 		var data = {
     		labels: valuesedges.keys,
     		datasets: [
@@ -424,53 +446,23 @@ document.addEventListener('DOMContentLoaded', function () {
 			width: $(window).width() * .8,
 			height:  $(window).height() * .5,
 			title:"Request duration",
-			close: function(event, ui) 
-        	{ 
+			close: function(event, ui)
+        	{
             	$('#myChart').html("");
-        	} 
+        	}
 		});
-		
+
 	});
-	$("#sankey").click(function(){
-		
-		var data = new google.visualization.DataTable();
-	    data.addColumn('string', 'From');
-	    data.addColumn('string', 'To');
-	    data.addColumn('number', 'Weight');
 
-	    var datrows = [];
-		var durations = {};
-		cy.edges().forEach(function (ele){
-				var edge= cy.getElementById(ele.id());
-				if(bgWindow.edgestime[ele.id()] && !isNaN(bgWindow.edgestime[ele.id()]))
-  					{
-  						durations[ele.id()] = bgWindow.edgestime[ele.id()] ;
-  						datrows.push([edge.source,edge.target,bgWindow.edgestime[ele.id()]]);
-  					}
-
-			});
-		data.addRows(datrows);
-		var options = {
-	      width: $(window).width() * .5,
-	      height:  $(window).height() * .5
-	    };
-
-		var chart = new google.visualization.Sankey(document.getElementById('sankeydiv'));
-		chart.draw(data, options);
-		
-
-		
-		
-	});
 
 	$("#about").click(function(){
-			$("#aboutdiv").attr("title","About Surf Graph");
+			$("#aboutdiv").attr("title","About HRNet");
 			$("#aboutdiv").dialog({
 				width: $(window).width() * .5,
 				height:  $(window).height() * .5,
 			});
 		});
-	
+
 
 });//	document.addEventListener('DOMContentLoaded', function () {
 function computeKeysValues(x)
@@ -503,7 +495,7 @@ function updateGraph(nodes, edges) {
 	*/
 	for (var i = 0; i < nodes.length; i++) {
 	cy.add(nodes[i]);
- 	
+
 	};
 	for (var i = 0; i < edges.length; i++) {
 		cy.add(edges[i]);
@@ -513,7 +505,7 @@ function updateGraph(nodes, edges) {
 function loadGraph(nodes, edges) {
 	//console.log({nodes: nodes,edges: edges,});
 	cy.remove(cy.nodes());
-	cy.remove(cy.edges());	
+	cy.remove(cy.edges());
 	for (var i = 0; i < nodes.length; i++) {
 		cy.add(nodes[i]);
 	};
