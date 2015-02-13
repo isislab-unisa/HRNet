@@ -21,7 +21,19 @@ var bgContent = bgDoc.createElement("div");
 bgContent.setAttribute("id", "content");
 bgDoc.getElementsByTagName("body")[0].appendChild(bgContent);
 
+function loadUrls(urls)
+{
+	var res = urls;
+	var xhr;
+	for (var i = 0; i < res.length; i++) {
+	//	chrome.tabs.create({ url: res[i] })
 
+		console.log(res[i]);
+		chrome.tabs.create({ url: res[i] });
+
+
+	}
+}
 /* Adds an event to the log */
 function pageAddLog(message) {
 	// Add to background

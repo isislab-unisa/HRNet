@@ -301,15 +301,30 @@ document.addEventListener('DOMContentLoaded', function () {
 		//alert($(this).val());
 		if(cy.elements().length > 0)
 		{
-			var gexf="?xml version=\"1.0\" encoding=\"UTF-8\"?><gexf xmlns=\"http://www.gexf.net/1.2draft\" version="1.2"><meta lastmodifieddate=\"2009-03-20\"><creator>hrnet.isislab.it</creator><description>This graph was made by sniffing the HTTP request.</description></meta><graph mode=\"static\" defaultedgetype=\"undirected\">";
-			gexf+="<nodes>";
+			var gexf="<?xml version=\"1.0\" encoding=\"UTF-8\"?><gexf xmlns=\"http://www.gexf.net/1.2draft\" version=\"1.2\"><meta lastmodifieddate=\"2009-03-20\"><creator>hrnet.isislab.it</creator><description>This graph was made by sniffing the HTTP request.</description></meta><graph mode=\"static\" defaultedgetype=\"undirected\">";
+			gexf+="<attributes class=\"node\"><attribute id=\"0\" title=\"url\" type=\"string\"/></attributes><nodes>";
 			var id=0;
+			var nodesmap = {};
 			cy.nodes().forEach(function (ele){
 					var node= cy.getElementById(ele.id());
-						gexf+="<node id=\""+id"\" label=\""+ele.id()+"\"/>"
+						gexf+="<node id=\""+id+"\" label=\""+ele.id()+"\"/>"
+						gexf+="<attvalues><attvalue for=\"0\" value=\""+ele.id()+"\"/></attvalues>";
+						nodesmap[ele.id()]=id;
+						id++;
 				});
 			gexf+="</nodes> <edges>";
-			alert(XML.innerHTML);
+			id=0;
+			cy.edges().forEach(function (ele){
+					var edge= cy.getElementById(ele.id());
+					var source = edge.source().id();
+					var target = edge.target().id();
+
+					gexf+="<edge id=\""+id+"\" source=\""+nodesmap[source]+"\" target=\""+nodesmap[target]+"\" />";
+					id++;
+				});
+				gexf+="</edges></graph></gexf>";
+				var blob = new Blob([gexf], {type: "text/plain;charset=utf-8"});
+				saveAs(blob, "graph.gexf");
 
 		}else alert("No elements in the graph!");
 
